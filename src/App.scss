@@ -1,0 +1,95 @@
+// src/App.scss
+@import "icons.scss";
+// src/App.scss
+$primary-color: #333;
+$secondary-color: #2c3e50;
+$text-color: #555;
+$error-color: #e74c3c;
+$background-light: #f9f9f9;
+$list-item-bg: #e6e6e6;
+$border-color: #ddd;
+
+.container {
+  max-width: 50rem; // 800px
+  margin: 0 auto;
+  padding: 1rem; // 16px
+  font-family: Arial, sans-serif;
+
+  h1 {
+    text-align: center;
+    color: $primary-color;
+  }
+
+  .tool-section {
+    margin-bottom: 2.5rem; // 40px
+    padding: 1rem; // 16px
+    border: 1px solid $border-color;
+    border-radius: 0.5rem; // 8px
+    background: $background-light;
+
+    h2 {
+      color: $secondary-color;
+      margin-bottom: 0.5rem; // 8px
+    }
+
+    p {
+      color: $text-color;
+      margin-bottom: 1rem; // 16px
+    }
+
+    .type-selector {
+      display: flex;
+      gap: 0.5rem; // 16px
+
+      div {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        flex-grow: 1;
+        label {
+          display: block;
+          font-weight: bold;
+          font-size: 0.9rem;
+          min-width: 7.5rem; // 120px
+        }
+
+        select {
+          padding: 0.5rem; // 8px
+          font-size: 1rem; // 16px
+          border-radius: 0.5rem; // 8px
+          border: 1px solid $border-color;
+          width: 100%; // 200px
+        }
+      }
+    }
+
+    .results {
+      margin-top: 1rem; // 16px
+
+      h3 {
+        color: $secondary-color;
+        margin-bottom: 0.5rem; // 8px
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+
+        li.type-item {
+          background: $list-item-bg;
+          padding: 0.5rem; // 8px
+          margin: 0.5rem 0; // 8px
+          border-radius: 4px; // Keep as 4px per exception
+          display: flex;
+          align-items: center;
+          gap: 0.5rem; // 8px
+
+        }
+      }
+
+      p {
+        color: $error-color;
+      }
+    }
+  }
+}

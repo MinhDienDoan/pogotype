@@ -1,0 +1,21 @@
+{
+  "name": "pokemon-type-chart-tool",
+  "version": "1.0.0",
+  "private": true,
+  "homepage": "https://minhdiendoan.github.io/pogotype",
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.2.0",
+    "@vitejs/plugin-react": "^4.3.2",
+    "vite": "^5.4.8",
+    "sass": "^1.79.5"
+  },
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "deploy": "gh-pages -d dist"
+  }
+}
