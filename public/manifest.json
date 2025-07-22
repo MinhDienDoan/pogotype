@@ -2,7 +2,7 @@
   "name": "Pokémon GO Type Effectiveness Tool",
   "short_name": "Pokémon Type Tool",
   "description": "A tool to find effective attack and defending types in Pokémon GO battles.",
-  "start_url": "/",
+  "start_url": "/pogotype/",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#2c3e50",
