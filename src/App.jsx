@@ -62,7 +62,7 @@ const App = () => {
 
   return (
     <div className="container">
-      <h1><img src="/assets/icons/pogotype-logo-512x512.png" alt="" width="192" height="192"/>Pokémon GO Type Effectiveness Tool</h1>
+      <h1><img src="/pogotype/assets/icons/pogotype-logo-512x512.png" alt="" width="192" height="192"/>Pokémon GO Type Effectiveness Tool</h1>
 
       {/* Tool 1: Attack Type Recommendations and Types to Avoid */}
       <div className="tool-section tool-section--attack">
@@ -98,7 +98,7 @@ const App = () => {
                 {attackRecommendations.map(({ attackType, multiplier }) => (
                   <li key={attackType} className="type-item">
                     <img
-                      src={`/assets/icons/${attackType.toLowerCase()}.svg`}
+                      src={`/pogotype/assets/icons/${attackType.toLowerCase()}.svg`}
                       alt={`${attackType} icon`}
                       className="type-icon"
                     />
@@ -115,7 +115,7 @@ const App = () => {
                 {attackToAvoid.map(({ attackType, multiplier }) => (
                   <li key={attackType} className="type-item">
                     <img
-                      src={`/assets/icons/${attackType.toLowerCase()}.svg`}
+                      src={`/pogotype/assets/icons/${attackType.toLowerCase()}.svg`}
                       alt={`${attackType} icon`}
                       className="type-icon"
                     />
@@ -153,7 +153,7 @@ const App = () => {
                 {defenseRecommendations.map(({ defendingType, multiplier }) => (
                   <li key={defendingType} className="type-item">
                     <img
-                      src={`/assets/icons/${defendingType.toLowerCase()}.svg`}
+                      src={`/pogotype/assets/icons/${defendingType.toLowerCase()}.svg`}
                       alt={`${defendingType} icon`}
                       className="type-icon"
                     />
@@ -170,7 +170,7 @@ const App = () => {
                 {defenseToAvoid.map(({ defendingType, multiplier }) => (
                   <li key={defendingType} className="type-item">
                     <img
-                      src={`/assets/icons/${defendingType.toLowerCase()}.svg`}
+                      src={`/pogotype/icons/${defendingType.toLowerCase()}.svg`}
                       alt={`${defendingType} icon`}
                       className="type-icon"
                     />
