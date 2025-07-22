@@ -1,0 +1,28 @@
+$primary-color: #426;
+$secondary-color: #2c3e50;
+$text-color: #546;
+$error-color: #e74c3c;
+$background-light: #f9f9f9;
+$list-item-bg: rgba(#e6e6e6, 0.75);
+$border-color: #ddd;
+
+$dark-primary-color: #f0f0f0;
+$dark-secondary-color: #ecf0f1;
+$dark-text-color: #bdc3c7;
+$dark-error-color: #e74c3c;
+$dark-background-light: #1c2e40;
+$dark-list-item-bg: rgba(#34495e, 0.75);
+$dark-border-color: #7f8c8d;
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    background-color:#013;
+    --text-primary-color: #{$dark-primary-color};
+    --text-secondary-color: #{$dark-secondary-color};
+    --global-color: #{$dark-text-color};
+    --error-color: #{$dark-error-color};
+    --section-bg-color: #{$dark-background-light};
+    --list-item-bg-color: #{$dark-list-item-bg};
+    --border-color: #{$dark-border-color};
+  }
+}

@@ -1,13 +1,9 @@
-// src/App.scss
-@import "icons.scss";
-// src/App.scss
-$primary-color: #333;
-$secondary-color: #2c3e50;
-$text-color: #555;
-$error-color: #e74c3c;
-$background-light: #f9f9f9;
-$list-item-bg: #e6e6e6;
-$border-color: #ddd;
+@use "icons.scss";
+@use "colors.scss";
+
+body {
+  margin: 0;
+}
 
 .container {
   max-width: 50rem; // 800px
@@ -16,24 +12,84 @@ $border-color: #ddd;
   font-family: Arial, sans-serif;
 
   h1 {
-    text-align: center;
-    color: $primary-color;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 0;
+    font-style: italic;
+    font-size: 1.7rem;
+    color: var(--text-primary-color, colors.$primary-color);
+    overflow:auto;
+
+    img {
+      float: left;
+      width: 25%;
+      height: auto;
+    }
   }
 
   .tool-section {
+    position: relative;
+    overflow: hidden;
     margin-bottom: 2.5rem; // 40px
     padding: 1rem; // 16px
-    border: 1px solid $border-color;
+    border: 1px solid var(--border-color, colors.$border-color);
     border-radius: 0.5rem; // 8px
-    background: $background-light;
+    background: var(--section-bg-color, colors.$background-light);
+
+    > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: block;
+      opacity: 0.1;
+      background-size: 100%;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-position: 50% 50% ;
+    }
+
+    &--attack {
+      &::before {
+        background-image: url("/assets/images/Zacian_Official_Package_Art.png");
+      }
+    }
+
+    &--defense {
+      &::before {
+        background-image: url("/assets/images/Zamazenta_Official_Package_Art.png");
+      }
+    }
+
+    .background-image {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      z-index: -1;
+    }
 
     h2 {
-      color: $secondary-color;
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0;
       margin-bottom: 0.5rem; // 8px
+      font-size: 1.3rem;
+      color: var(--text-secondary-color, colors.$secondary-color);
+
+      svg {
+        width: 1.5rem;
+        fill: var(--text-secondary-color, colors.$secondary-color);
+      }
     }
 
     p {
-      color: $text-color;
+      color: var(--global-color, colors.$text-color);
       margin-bottom: 1rem; // 16px
     }
 
@@ -46,19 +102,22 @@ $border-color: #ddd;
         flex-direction: column;
         gap: 0.25rem;
         flex-grow: 1;
+        flex-basis: 50%;
         label {
           display: block;
           font-weight: bold;
           font-size: 0.9rem;
-          min-width: 7.5rem; // 120px
+          color: var(--text-secondary-color, colors.$secondary-color);
         }
 
         select {
           padding: 0.5rem; // 8px
           font-size: 1rem; // 16px
-          border-radius: 0.5rem; // 8px
-          border: 1px solid $border-color;
+          border-radius: 0.25rem; // 8px
+          border: 1px solid var(--border-color, colors.$border-color);
           width: 100%; // 200px
+          background-color: var( --list-item-bg-color, colors.$list-item-bg);
+          color: var(--text-primary-color, colors.$primary-color);
         }
       }
     }
@@ -67,7 +126,7 @@ $border-color: #ddd;
       margin-top: 1rem; // 16px
 
       h3 {
-        color: $secondary-color;
+        color: var(--text-secondary-color, colors.$secondary-color);
         margin-bottom: 0.5rem; // 8px
       }
 
@@ -76,19 +135,20 @@ $border-color: #ddd;
         padding: 0;
 
         li.type-item {
-          background: $list-item-bg;
+          background: var(--list-item-bg-color, colors.$list-item-bg);
           padding: 0.5rem; // 8px
           margin: 0.5rem 0; // 8px
           border-radius: 4px; // Keep as 4px per exception
           display: flex;
           align-items: center;
           gap: 0.5rem; // 8px
+          color: var(--text-primary-color, colors.$primary-color);
 
         }
       }
 
       p {
-        color: $error-color;
+        color: var(--error-color, colors.$error-color);
       }
     }
   }

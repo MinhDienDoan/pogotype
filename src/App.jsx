@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import './App.scss';
 import typeChart from './typeChart.json';
+import SwordIcon from './assets/icons/sword';
+import ShieldIcon from './assets/icons/shield';
 
 const types = Object.keys(typeChart);
 
@@ -60,15 +62,15 @@ const App = () => {
 
   return (
     <div className="container">
-      <h1>Pokémon GO Type Effectiveness Tool</h1>
+      <h1><img src="/assets/icons/pogotype-logo-512x512.png" alt="" width="192" height="192"/>Pokémon GO Type Effectiveness Tool</h1>
 
       {/* Tool 1: Attack Type Recommendations and Types to Avoid */}
-      <div className="tool-section">
-        <h2>Find Best Attack Types</h2>
+      <div className="tool-section tool-section--attack">
+        <h2><SwordIcon/> Best Attack Types</h2>
         <p>Select the defending Pokémon's type(s) to see recommended attack types (damage &gt; 1x) and types to avoid (damage &lt; 1x).</p>
         <div className="type-selector">
           <div>
-            <label>Defending Type 1</label>
+            <label>Enemy Type 1</label>
             <select value={defendingType1} onChange={(e) => setDefendingType1(e.target.value)}>
               <option value="">Select Type</option>
               {types.map(type => (
@@ -77,7 +79,7 @@ const App = () => {
             </select>
           </div>
           <div>
-            <label>Defending Type 2</label>
+            <label>Enemy Type 2</label>
             <select value={defendingType2} onChange={(e) => setDefendingType2(e.target.value)}>
               <option value="">None</option>
               {types
@@ -105,7 +107,7 @@ const App = () => {
                 ))}
               </ul>
             ) : (
-              <p>No attack types deal super-effective damage (>1x).</p>
+              <p>No attack types deal super-effective damage (&gt;1x).</p>
             )}
             <h3>Attack Types to Avoid</h3>
             {attackToAvoid.length > 0 ? (
@@ -129,12 +131,12 @@ const App = () => {
       </div>
 
       {/* Tool 2: Defending Type Recommendations and Types to Avoid */}
-      <div className="tool-section">
-        <h2>Find Best Defending Types</h2>
+      <div className="tool-section tool-section--defense">
+        <h2><ShieldIcon/> Find Best Defending Types</h2>
         <p>Select an attacking type to see recommended defending types (damage &lt; 1x) and types to avoid (damage &gt; 1x).</p>
         <div className="type-selector">
           <div>
-            <label>Attacking Type: </label>
+            <label>Enemy attack Type: </label>
             <select value={attackingType} onChange={(e) => setAttackingType(e.target.value)}>
               <option value="">Select Type</option>
               {types.map(type => (
@@ -177,7 +179,7 @@ const App = () => {
                 ))}
               </ul>
             ) : (
-              <p>No defending types take super-effective damage (>1x).</p>
+              <p>No defending types take super-effective damage (&gt;1x).</p>
             )}
           </div>
         )}
