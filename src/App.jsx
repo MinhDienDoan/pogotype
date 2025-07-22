@@ -170,7 +170,7 @@ const App = () => {
                 {defenseToAvoid.map(({ defendingType, multiplier }) => (
                   <li key={defendingType} className="type-item">
                     <img
-                      src={`/pogotype/icons/${defendingType.toLowerCase()}.svg`}
+                      src={`/pogotype/assets/icons/${defendingType.toLowerCase()}.svg`}
                       alt={`${defendingType} icon`}
                       className="type-icon"
                     />
