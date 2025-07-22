@@ -1,20 +1,41 @@
-// src/App.jsx
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import './App.scss';
 import typeChart from './typeChart.json';
 import SwordIcon from './assets/icons/sword';
 import ShieldIcon from './assets/icons/shield';
+import CopyIcon from './assets/icons/copy';
 
 const types = Object.keys(typeChart);
+const languages = [
+  { code: 'en', name: 'English' },
+  { code: 'fr', name: 'Français' },
+  { code: 'de', name: 'Deutsch' },
+  { code: 'it', name: 'Italiano' },
+  { code: 'es', name: 'Español' },
+  { code: 'pt-BR', name: 'Português (Brasil)' }
+];
 
 const App = () => {
+  const { t, i18n } = useTranslation();
   const [defendingType1, setDefendingType1] = useState('');
   const [defendingType2, setDefendingType2] = useState('');
   const [attackingType, setAttackingType] = useState('');
 
-  // Tool 1: Calculate recommended attack types (> 1x) and types to avoid (< 1x)
+  const handleLanguageChange = (event) => {
+    const newLang = event.target.value;
+    i18n.changeLanguage(newLang);
+  };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(
+      () => alert(t('copied_to_clipboard')),
+      (err) => console.error('Failed to copy:', err)
+    );
+  };
+
   const calculateAttackRecommendations = () => {
-    if (!defendingType1) return { recommended: [], toAvoid: [] };
+    if (!defendingType1) return { recommended: [], toAvoid: [], recommendedSearchString: '', toAvoidSearchString: '' };
 
     const recommended = [];
     const toAvoid = [];
@@ -30,15 +51,23 @@ const App = () => {
       }
     });
 
+    const recommendedSearchString = recommended.length > 0
+      ? recommended.map(item => `@${t(`type.${item.attackType}`).toLowerCase()}`).join(',')
+      : '';
+    const toAvoidSearchString = toAvoid.length > 0
+      ? toAvoid.map(item => `!@${t(`type.${item.attackType}`).toLowerCase()}`).join('&')
+      : '';
+
     return {
       recommended: recommended.sort((a, b) => b.multiplier - a.multiplier),
       toAvoid: toAvoid.sort((a, b) => a.multiplier - b.multiplier),
+      recommendedSearchString,
+      toAvoidSearchString
     };
   };
 
-  // Tool 2: Calculate recommended defending types (< 1x) and types to avoid (> 1x)
   const calculateDefenseRecommendations = () => {
-    if (!attackingType) return { recommended: [], toAvoid: [] };
+    if (!attackingType) return { recommended: [], toAvoid: [], recommendedSearchString: '', toAvoidSearchString: '' };
 
     const recommended = [];
     const toAvoid = [];
@@ -51,135 +80,192 @@ const App = () => {
       }
     });
 
+    const recommendedSearchString = recommended.length > 0
+      ? recommended.map(item => t(`type.${item.defendingType}`).toLowerCase()).join(',')
+      : '';
+    const toAvoidSearchString = toAvoid.length > 0
+      ? toAvoid.map(item => `!${t(`type.${item.defendingType}`).toLowerCase()}`).join('&')
+      : '';
+
     return {
       recommended: recommended.sort((a, b) => a.multiplier - b.multiplier),
       toAvoid: toAvoid.sort((a, b) => b.multiplier - a.multiplier),
+      recommendedSearchString,
+      toAvoidSearchString
     };
   };
 
-  const { recommended: attackRecommendations, toAvoid: attackToAvoid } = calculateAttackRecommendations();
-  const { recommended: defenseRecommendations, toAvoid: defenseToAvoid } = calculateDefenseRecommendations();
+  const { recommended: attackRecommendations, toAvoid: attackToAvoid, recommendedSearchString: attackRecommendedSearchString, toAvoidSearchString: attackToAvoidSearchString } = calculateAttackRecommendations();
+  const { recommended: defenseRecommendations, toAvoid: defenseToAvoid, recommendedSearchString: defenseRecommendedSearchString, toAvoidSearchString: defenseToAvoidSearchString } = calculateDefenseRecommendations();
 
   return (
     <div className="container">
-      <h1><img src="/pogotype/assets/icons/pogotype-logo-512x512.png" alt="" width="192" height="192"/>Pokémon GO Type Effectiveness Tool</h1>
+      <header className="header">
+        <h1><img src="/pogotype/assets/icons/pogotype-logo-512x512.png" alt="" width="192" height="192"/> {t('title')}</h1>
+        <div className="language-switcher">
+          <label htmlFor="language-select">{t('language')}</label>
+          <select
+            id="language-select"
+            value={i18n.language}
+            onChange={handleLanguageChange}
+          >
+            {languages.map(({ code, name }) => (
+              <option key={code} value={code}>{name}</option>
+            ))}
+          </select>
+        </div>
+      </header>
 
-      {/* Tool 1: Attack Type Recommendations and Types to Avoid */}
       <div className="tool-section tool-section--attack">
-        <h2><SwordIcon/> Best Attack Types</h2>
-        <p>Select the defending Pokémon's type(s) to see recommended attack types (damage &gt; 1x) and types to avoid (damage &lt; 1x).</p>
+        <h2><SwordIcon/> {t('tool1_title')}</h2>
+        <p>{t('tool1_description')}</p>
         <div className="type-selector">
           <div>
-            <label>Enemy Type 1</label>
+            <label>{t('defending_type1')} </label>
             <select value={defendingType1} onChange={(e) => setDefendingType1(e.target.value)}>
-              <option value="">Select Type</option>
+              <option value="">{t('select_type')}</option>
               {types.map(type => (
-                <option key={type} value={type}>{type}</option>
+                <option key={type} value={type}>{t(`type.${type}`)}</option>
               ))}
             </select>
           </div>
           <div>
-            <label>Enemy Type 2</label>
+            <label>{t('defending_type2')} </label>
             <select value={defendingType2} onChange={(e) => setDefendingType2(e.target.value)}>
-              <option value="">None</option>
+              <option value="">{t('none')}</option>
               {types
                 .filter(type => type !== defendingType1)
                 .map(type => (
-                  <option key={type} value={type}>{type}</option>
+                  <option key={type} value={type}>{t(`type.${type}`)}</option>
                 ))}
             </select>
           </div>
         </div>
         {defendingType1 && (
           <div className="results">
-            <h3>Recommended Attack Types</h3>
+            <h3>{t('recommended_attack_types')}</h3>
             {attackRecommendations.length > 0 ? (
-              <ul>
-                {attackRecommendations.map(({ attackType, multiplier }) => (
-                  <li key={attackType} className="type-item">
-                    <img
-                      src={`/pogotype/assets/icons/${attackType.toLowerCase()}.svg`}
-                      alt={`${attackType} icon`}
-                      className="type-icon"
-                    />
-                    {attackType}: {multiplier.toFixed(2)}x damage
-                  </li>
-                ))}
-              </ul>
+              <>
+                <ul>
+                  {attackRecommendations.map(({ attackType, multiplier }) => (
+                    <li key={attackType} className="type-item">
+                      <img
+                        src={`/pogotype/assets/icons/${attackType.toLowerCase()}.svg`}
+                        alt={`${t(`type.${attackType}`)} icon`}
+                        className="type-icon"
+                      />
+                      {t(`type.${attackType}`)}: {multiplier.toFixed(2)}x {t('damage')}
+                    </li>
+                  ))}
+                </ul>
+                <h4>{t('search_string')}:</h4>
+                <div className="search-string">
+                  <span>{attackRecommendedSearchString}</span>
+                  <button onClick={() => copyToClipboard(attackRecommendedSearchString)} aria-label={t('copy')} title={t('copy')}>
+                    <CopyIcon />
+                  </button>
+                </div>
+              </>
             ) : (
-              <p>No attack types deal super-effective damage (&gt;1x).</p>
+              <p>{t('no_super_effective')}</p>
             )}
-            <h3>Attack Types to Avoid</h3>
+            <h3>{t('attack_types_to_avoid')}</h3>
             {attackToAvoid.length > 0 ? (
-              <ul>
-                {attackToAvoid.map(({ attackType, multiplier }) => (
-                  <li key={attackType} className="type-item">
-                    <img
-                      src={`/pogotype/assets/icons/${attackType.toLowerCase()}.svg`}
-                      alt={`${attackType} icon`}
-                      className="type-icon"
-                    />
-                    {attackType}: {multiplier.toFixed(3)}x damage
-                  </li>
-                ))}
-              </ul>
+              <>
+                <ul>
+                  {attackToAvoid.map(({ attackType, multiplier }) => (
+                    <li key={attackType} className="type-item">
+                      <img
+                        src={`/pogotype/assets/icons/${attackType.toLowerCase()}.svg`}
+                        alt={`${t(`type.${attackType}`)} icon`}
+                        className="type-icon"
+                      />
+                      {t(`type.${attackType}`)}: {multiplier.toFixed(3)}x {t('damage')}
+                    </li>
+                  ))}
+                </ul>
+                <h4>{t('search_string')}:</h4>
+                <div className="search-string">
+                  <span>{attackToAvoidSearchString}</span>
+                  <button onClick={() => copyToClipboard(attackToAvoidSearchString)} aria-label={t('copy')} title={t('copy')}>
+                    <CopyIcon />
+                  </button>
+                </div>
+              </>
             ) : (
-              <p>No attack types deal less than normal damage.</p>
+              <p>{t('no_less_effective')}</p>
             )}
           </div>
         )}
       </div>
 
-      {/* Tool 2: Defending Type Recommendations and Types to Avoid */}
       <div className="tool-section tool-section--defense">
-        <h2><ShieldIcon/> Find Best Defending Types</h2>
-        <p>Select an attacking type to see recommended defending types (damage &lt; 1x) and types to avoid (damage &gt; 1x).</p>
+        <h2><ShieldIcon/> {t('tool2_title')}</h2>
+        <p>{t('tool2_description')}</p>
         <div className="type-selector">
           <div>
-            <label>Enemy attack Type: </label>
+            <label>{t('attacking_type')} </label>
             <select value={attackingType} onChange={(e) => setAttackingType(e.target.value)}>
-              <option value="">Select Type</option>
+              <option value="">{t('select_type')}</option>
               {types.map(type => (
-                <option key={type} value={type}>{type}</option>
+                <option key={type} value={type}>{t(`type.${type}`)}</option>
               ))}
             </select>
           </div>
         </div>
         {attackingType && (
           <div className="results">
-            <h3>Recommended Defending Types</h3>
+            <h3>{t('recommended_defending_types')}</h3>
             {defenseRecommendations.length > 0 ? (
-              <ul>
-                {defenseRecommendations.map(({ defendingType, multiplier }) => (
-                  <li key={defendingType} className="type-item">
-                    <img
-                      src={`/pogotype/assets/icons/${defendingType.toLowerCase()}.svg`}
-                      alt={`${defendingType} icon`}
-                      className="type-icon"
-                    />
-                    {defendingType}: {multiplier.toFixed(3)}x damage
-                  </li>
-                ))}
-              </ul>
+              <>
+                <ul>
+                  {defenseRecommendations.map(({ defendingType, multiplier }) => (
+                    <li key={defendingType} className="type-item">
+                      <img
+                        src={`/pogotype/assets/icons/${defendingType.toLowerCase()}.svg`}
+                        alt={`${t(`type.${defendingType}`)} icon`}
+                        className="type-icon"
+                      />
+                      {t(`type.${defendingType}`)}: {multiplier.toFixed(3)}x {t('damage')}
+                    </li>
+                  ))}
+                </ul>
+                <h4>{t('search_string')}:</h4>
+                <div className="search-string">
+                  <span>{defenseRecommendedSearchString}</span>
+                  <button onClick={() => copyToClipboard(defenseRecommendedSearchString)} aria-label={t('copy')} title={t('copy')}>
+                    <CopyIcon />
+                  </button>
+                </div>
+              </>
             ) : (
-              <p>No defending types resist this attack type.</p>
+              <p>{t('no_resistances')}</p>
             )}
-            <h3>Defending Types to Avoid</h3>
+            <h3>{t('defending_types_to_avoid')}</h3>
             {defenseToAvoid.length > 0 ? (
-              <ul>
-                {defenseToAvoid.map(({ defendingType, multiplier }) => (
-                  <li key={defendingType} className="type-item">
-                    <img
-                      src={`/pogotype/assets/icons/${defendingType.toLowerCase()}.svg`}
-                      alt={`${defendingType} icon`}
-                      className="type-icon"
-                    />
-                    {defendingType}: {multiplier.toFixed(2)}x damage
-                  </li>
-                ))}
-              </ul>
+              <>
+                <ul>
+                  {defenseToAvoid.map(({ defendingType, multiplier }) => (
+                    <li key={defendingType} className="type-item">
+                      <img
+                        src={`/pogotype/assets/icons/${defendingType.toLowerCase()}.svg`}
+                        alt={`${t(`type.${defendingType}`)} icon`}
+                        className="type-icon"
+                      />
+                      {t(`type.${defendingType}`)}: {multiplier.toFixed(2)}x {t('damage')}
+                    </li>
+                  ))}
+                </ul>
+                <h4>{t('search_string')}:</h4>
+                <div className="search-string">
+                  <span>{defenseToAvoidSearchString}</span>
+                  <button onClick={() => copyToClipboard(defenseToAvoidSearchString)} aria-label={t('copy')} title={t('copy')}>
+                    <CopyIcon />
+                  </button>
+                </div>
+              </>
             ) : (
-              <p>No defending types take super-effective damage (&gt;1x).</p>
+              <p>{t('no_weaknesses')}</p>
             )}
           </div>
         )}

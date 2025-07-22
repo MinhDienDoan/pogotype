@@ -1,17 +1,20 @@
 {
   "name": "pokemon-type-chart-tool",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "homepage": "https://minhdiendoan.github.io/pogotype",
   "dependencies": {
+    "i18next": "^25.3.2",
+    "i18next-browser-languagedetector": "^8.2.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-i18next": "^15.6.0"
   },
   "devDependencies": {
-    "gh-pages": "^6.2.0",
     "@vitejs/plugin-react": "^4.3.2",
-    "vite": "^5.4.8",
-    "sass": "^1.79.5"
+    "gh-pages": "^6.2.0",
+    "sass": "^1.79.5",
+    "vite": "^5.4.8"
   },
   "scripts": {
     "start": "vite",

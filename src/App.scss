@@ -1,6 +1,15 @@
 @use "icons.scss";
 @use "colors.scss";
 
+@mixin select-style {
+  padding: 0.5rem; // 8px
+  font-size: 1rem; // 16px
+  border-radius: 0.25rem; // 8px
+  border: 1px solid var(--border-color, colors.$border-color);
+  background-color: var( --list-item-bg-color, colors.$list-item-bg);
+  color: var(--text-primary-color, colors.$primary-color);
+}
+
 body {
   margin: 0;
 }
@@ -25,6 +34,23 @@ body {
       float: left;
       width: 25%;
       height: auto;
+    }
+  }
+
+  .language-switcher {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+
+    label {
+      font-size: 1rem;
+      color: var(--text-secondary-color, colors.$secondary-color);
+    }
+
+    select {
+      @include select-style;
     }
   }
 
@@ -93,6 +119,11 @@ body {
       margin-bottom: 1rem; // 16px
     }
 
+    h4 {
+      color: var(--text-secondary-color, colors.$secondary-color);
+      margin-bottom: 0.25rem;
+    }
+
     .type-selector {
       display: flex;
       gap: 0.5rem; // 16px
@@ -111,13 +142,8 @@ body {
         }
 
         select {
-          padding: 0.5rem; // 8px
-          font-size: 1rem; // 16px
-          border-radius: 0.25rem; // 8px
-          border: 1px solid var(--border-color, colors.$border-color);
+          @include select-style;
           width: 100%; // 200px
-          background-color: var( --list-item-bg-color, colors.$list-item-bg);
-          color: var(--text-primary-color, colors.$primary-color);
         }
       }
     }
@@ -138,7 +164,7 @@ body {
           background: var(--list-item-bg-color, colors.$list-item-bg);
           padding: 0.5rem; // 8px
           margin: 0.5rem 0; // 8px
-          border-radius: 4px; // Keep as 4px per exception
+          border-radius: 0.25rem; // Keep as 4px per exception
           display: flex;
           align-items: center;
           gap: 0.5rem; // 8px
@@ -149,6 +175,27 @@ body {
 
       p {
         color: var(--error-color, colors.$error-color);
+      }
+
+      .search-string {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 0.25rem; // 4px
+        padding: 1rem 0.5rem;
+        background: var(--list-item-bg-color, colors.$list-item-bg);
+        color: var(--global-color, colors.$text-color);
+        span {
+          word-break: break-all;
+        }
+        button {
+          background: none;
+          border: 0;
+          svg {
+            width: 1.5rem;
+            fill: var(--global-color, colors.$text-color);
+          }
+        }
       }
     }
   }
